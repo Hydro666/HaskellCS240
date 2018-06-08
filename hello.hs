@@ -13,3 +13,6 @@ weirdList :: [MyPoly Bool Int]
 weirdFirst = MyAll True 5
 weirdSecond = MyLeft False
 weirdList = [weirdFirst, weirdSecond]
+
+addMaybe :: (Num a) => (Maybe a) -> (Maybe a) -> (Maybe a)
+addMaybe (Just x) (Just y) = Just (x + y)
