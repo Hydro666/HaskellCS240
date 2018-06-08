@@ -18,3 +18,8 @@ combs :: [(Move, Move)]
 combs = [(a, b) | a <- moves, b <- moves]
 
 toShow = zip combs [outcome (fst x) (snd x) | x <- combs]
+
+parseMove :: String -> Maybe Move
+parseMove str 
+  | [(move, "")] <- reads str = Just move
+  | otherwise = Nothing
