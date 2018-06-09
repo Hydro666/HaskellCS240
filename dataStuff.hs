@@ -16,3 +16,16 @@ getNumber :: NoGenerics -> Double
 getNumber (Numbers n d) = d
 
 data Point = Point Double Double deriving (Show, Read)
+
+data MyGoals = Goals {
+    programProject :: String
+   ,mathProject    :: String
+   ,gameProject    :: String
+}
+
+data List a = Cons a (List a)
+            | Nil deriving Show
+
+fromCons :: List a -> [a]
+fromCons Nil = []
+fromCons (Cons a as) = a : fromCons as
