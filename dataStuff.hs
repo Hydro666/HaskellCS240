@@ -22,10 +22,3 @@ data MyGoals = Goals {
    ,mathProject    :: String
    ,gameProject    :: String
 }
-
-data List a = Cons a (List a)
-            | Nil deriving Show
-
-fromCons :: List a -> [a]
-fromCons Nil = []
-fromCons (Cons a as) = a : fromCons as

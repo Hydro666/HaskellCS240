@@ -31,5 +31,8 @@ type CharSet = String
 -- It's up to you how to handle the first argument being the empty string, or
 -- the second argument being `Just ""`, we will not be testing this edge case.
 tr :: CharSet -> Maybe CharSet -> String -> String
+tr inset Nothing xs  = deleteFrom inset xs
+tr inset (Just outset) xs =
 tr _inset _outset xs = xs
 
+deleteFrom :: CharSet -> String -> String
