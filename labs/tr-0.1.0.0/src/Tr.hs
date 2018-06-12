@@ -11,6 +11,7 @@ module Tr
 
 -- | Just to give `tr` a more descriptive type
 type CharSet = String
+type CharMap = [(Char, Char)]
 
 -- | 'tr' - the characters in the first argument are translated into characters
 -- in the second argument, where first character in the first CharSet is mapped
@@ -31,8 +32,27 @@ type CharSet = String
 -- It's up to you how to handle the first argument being the empty string, or
 -- the second argument being `Just ""`, we will not be testing this edge case.
 tr :: CharSet -> Maybe CharSet -> String -> String
-tr inset Nothing xs  = deleteFrom inset xs
-tr inset (Just outset) xs =
-tr _inset _outset xs = xs
+tr inset Nothing xs       = deleteFrom inset xs
+tr inset (Just outset) xs = translate (equalizeAndZip inset outset) xs
+tr _inset _outset xs      = xs
 
 deleteFrom :: CharSet -> String -> String
+deleteFrom inset xs = filter (\a -> not $ elem a inset) xs
+
+translate :: CharMap -> String -> String
+translate cmap input = ""
+
+equalizeAndZip :: [a] -> [b] -> [(a, b)]
+equalizeAndZip lst1 lst2 
+  | len1 == len2 = zip lst1 lst2
+  | null lst2     = undefined
+  | len1 > len2  = zip lst1 (extendBy lst2 len1)
+  | otherwise    = zip lst1 (take len1 lst2)
+  where len1 = length lst1
+        len2 = length lst2
+
+extendBy :: [a] -> Int -> [a]
+extendBy lst n
+  | len > n   = error "The list is longer than the desired length."
+  | otherwise = lst ++ replicate (n - len) (last lst)
+  where len = length lst
