@@ -34,23 +34,30 @@ type CharMap = [(Char, Char)]
 tr :: CharSet -> Maybe CharSet -> String -> String
 tr inset Nothing xs       = deleteFrom inset xs
 tr inset (Just outset) xs = translate (equalizeAndZip inset outset) xs
-tr _inset _outset xs      = xs
 
 deleteFrom :: CharSet -> String -> String
 deleteFrom inset xs = filter (\a -> not $ elem a inset) xs
 
 translate :: CharMap -> String -> String
-translate cmap input = ""
+translate cmap input = let helper c = case lookup c cmap of 
+                                      Just fc -> fc
+                                      Nothing -> c
+                       in map helper input
 
+-- This processes the 2 lists so that if the second list is shorter than the
+-- first list, then the last item will be repeated until the second list is the
+-- same length as the first list.
+-- Precondition:  The lists _must_ be nonempty.
 equalizeAndZip :: [a] -> [b] -> [(a, b)]
 equalizeAndZip lst1 lst2 
-  | len1 == len2 = zip lst1 lst2
-  | null lst2     = undefined
   | len1 > len2  = zip lst1 (extendBy lst2 len1)
-  | otherwise    = zip lst1 (take len1 lst2)
+  | otherwise    = zip lst1 lst2
   where len1 = length lst1
         len2 = length lst2
 
+-- Extend the list by copying and appending the last item of the list until the
+-- length of the list is equal to the first argument.
+-- Precondition:  The first argument _cannot_ be less than the length of the list.
 extendBy :: [a] -> Int -> [a]
 extendBy lst n
   | len > n   = error "The list is longer than the desired length."
